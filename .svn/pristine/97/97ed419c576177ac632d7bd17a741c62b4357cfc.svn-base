@@ -1,0 +1,105 @@
+package com.uslc.po.jpa.test;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.Query;
+
+import static org.eclipse.persistence.config.PersistenceUnitProperties.*;
+
+import javax.persistence.spi.PersistenceUnitTransactionType;
+
+import org.eclipse.persistence.config.TargetServer;
+
+import com.uslc.po.jpa.entity.Color;
+import com.uslc.po.jpa.entity.Item;
+import com.uslc.po.jpa.entity.PurchaseOrder;
+import com.uslc.po.jpa.entity.Upc;
+import com.uslc.po.jpa.entity.User;
+import com.uslc.po.jpa.util.UslcJpa;
+
+public class UslcJpaManager {
+	public List<PurchaseOrder> poList = null;
+	private Map<String,String> properties = null;
+	public List<Color> colorList = null;
+	public List<Upc> upcList = null;
+	public List<Item> itemList = null;
+	public List<User> userList = null;
+	private UslcJpa jpa = null;
+	
+	public UslcJpaManager( String dbHost, int dbPort, String dbName, String dbUser, String dbPassword, String jdbcDriver ) {
+		properties = new HashMap<String, String>();
+		 
+	    // Ensure RESOURCE_LOCAL transactions is used.
+	    properties.put(TRANSACTION_TYPE, PersistenceUnitTransactionType.RESOURCE_LOCAL.name());
+	 
+	    // Configure the internal EclipseLink connection pool
+	    properties.put(JDBC_DRIVER, jdbcDriver);
+	    properties.put(JDBC_URL, "jdbc:mysql://"+dbHost+":"+dbPort+"/" + dbName);
+	    properties.put(JDBC_USER, dbUser);
+	    properties.put(JDBC_PASSWORD, dbPassword);
+	 
+	    // Configure logging. FINE ensures all SQL is shown
+	    properties.put(LOGGING_LEVEL, "FINE");
+	    properties.put(LOGGING_TIMESTAMP, "false");
+	    properties.put(LOGGING_THREAD, "false");
+	    properties.put(LOGGING_SESSION, "false");
+	 
+	    // Ensure that no server-platform is configured
+	    properties.put(TARGET_SERVER, TargetServer.None);
+	}
+	
+	public List<PurchaseOrder> getPurchaseOrderList() {
+		if( poList == null ) {
+			Query q = getJpa().getEntityManager().createQuery("SELECT po FROM PurchaseOrder po WHERE po.deleted=:deleted ORDER BY po.referenceNumber DESC");
+			q.setParameter("deleted", false);
+			poList = (List<PurchaseOrder>)q.getResultList();
+		}
+		return poList;
+	}
+	
+	public List<Color> getColors(){
+		if( colorList == null ) {
+			Query q = getJpa().getEntityManager().createQuery("SELECT c FROM Color c");
+			colorList = (List<Color>)q.getResultList();
+		}
+		return colorList;
+	}
+	public List<Upc> getUpcs(){
+		if( upcList == null ) {
+			Query q = getJpa().getEntityManager().createQuery("SELECT u FROM Upc u ORDER BY u.deleted, u.upcCode ASC");
+			upcList = (List<Upc>)q.getResultList();
+		}
+		return upcList;
+	}
+	public List<Item> getItems() {
+		if( itemList == null ) {
+			Query q = getJpa().getEntityManager().createQuery("SELECT i FROM Item i");
+			itemList = (List<Item>)q.getResultList();
+		}
+		return itemList;
+	}
+	public List<User> getUsers() {
+		if( userList == null ) {
+			Query q = getJpa().getEntityManager().createQuery("SELECT u FROM User u ORDER BY u.enabled DESC, u.userType ASC, u.firstName ASC");
+			userList = (List<User>)q.getResultList();
+		}
+		return userList;
+	}
+	
+	private UslcJpa getJpa() {
+		if( jpa == null ) {
+			jpa = new UslcJpa( getProperties() );
+		}
+		return jpa;
+	}
+	
+	private Map<String,String> getProperties(){
+		return properties;
+	}
+	
+	public static void main(String[] args) {
+
+	}
+}
