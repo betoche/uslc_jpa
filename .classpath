@@ -8,7 +8,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/home/betoche_1/workspace/uslc_jpa/src/META-INF/lib/log4j.jar"/>
 	<classpathentry kind="lib" path="/home/betoche_1/workspace/uslc_jpa/src/META-INF/lib/mysql-connector-java-5.1.30-bin.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/EclipseLink 2.5.0 - Kepler">
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/EclipseLink 2.5.2">
 		<attributes>
 			<attribute name="owner.project.facets" value="jpt.jpa"/>
 		</attributes>
