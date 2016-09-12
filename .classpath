@@ -3,8 +3,6 @@
 	<classpathentry excluding="META-INF/lib/" kind="src" path="src"/>
 	<classpathentry kind="lib" path="src/META-INF/lib/log4j.jar"/>
 	<classpathentry kind="lib" path="src/META-INF/lib/mysql-connector-java-5.1.30-bin.jar"/>
-	<classpathentry kind="lib" path="/home/betoche_1/workspace/uslc_jpa/src/META-INF/lib/log4j.jar"/>
-	<classpathentry kind="lib" path="/home/betoche_1/workspace/uslc_jpa/src/META-INF/lib/mysql-connector-java-5.1.30-bin.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/EclipseLink 2.5.2">
 		<attributes>
 			<attribute name="owner.project.facets" value="jpt.jpa"/>
@@ -15,6 +13,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="src/META-INF/lib/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="/home/alarios/my_workspace/uslc_exe/classpath/commons-codec-1.7.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

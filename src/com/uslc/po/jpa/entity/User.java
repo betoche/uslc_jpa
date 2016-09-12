@@ -1,189 +1,174 @@
+/*
+ * Decompiled with CFR 0_115.
+ * 
+ * Could not load the following classes:
+ *  javax.persistence.Column
+ *  javax.persistence.Entity
+ *  javax.persistence.GeneratedValue
+ *  javax.persistence.GenerationType
+ *  javax.persistence.Id
+ *  javax.persistence.NamedQuery
+ *  javax.persistence.OneToMany
+ *  javax.persistence.Table
+ *  javax.persistence.Temporal
+ *  javax.persistence.TemporalType
+ */
 package com.uslc.po.jpa.entity;
 
+import com.uslc.po.jpa.entity.Log;
+import com.uslc.po.jpa.entity.PurchaseOrderByUser;
 import java.io.Serializable;
-
-import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-
-/**
- * The persistent class for the user database table.
- * 
- */
 @Entity
 @Table(name="user")
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
-public class User implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class User
+implements Serializable {
+    private static final long serialVersionUID = 1;
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int id;
+    @Column(name="enabled")
+    private boolean enabled;
+    @Column(name="active")
+    private boolean active;
+    @Column(name="first_name")
+    private String firstName;
+    @Column(name="last_name")
+    private String lastName;
+    private String password;
+    @Temporal(value=TemporalType.TIMESTAMP)
+    private Date timestamp;
+    @Column(name="user_type")
+    private int userType;
+    private String username;
+    @OneToMany(mappedBy="user")
+    private List<Log> logs;
+    @OneToMany(mappedBy="user")
+    private List<PurchaseOrderByUser> purchaseOrders = null;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+    public int getId() {
+        return this.id;
+    }
 
-	@Column(name="enabled", nullable=false)
-	private boolean enabled;
-	
-	@Column(name="active", nullable=false)
-	private boolean active;
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	@Column(name="first_name", nullable=false)
-	private String firstName;
+    public boolean isActive() {
+        return this.active;
+    }
 
-	@Column(name="last_name", nullable=false)
-	private String lastName;
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
-	@Column(name="password", nullable=false)
-	private String password;
+    public boolean isEnabled() {
+        return this.enabled;
+    }
 
-	@Column(name="timestamp", nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date timestamp;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	@Column(name="user_type", nullable=false)
-	private int userType;
+    public String getFirstName() {
+        return this.firstName;
+    }
 
-	@Column(name="username", nullable=false)
-	private String username;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	//bi-directional many-to-one association to Log
-	@OneToMany(mappedBy="user", cascade={CascadeType.PERSIST,CascadeType.MERGE, CascadeType.REMOVE})
-	private List<Log> logs;
-	@OneToMany(mappedBy="user")
-	private List<PurchaseOrderByUser> purchaseOrders = null;
+    public String getLastName() {
+        return this.lastName;
+    }
 
-	public User() {
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    public String getPassword() {
+        return this.password;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public boolean isActive() {
-		return this.active;
-	}
+    public Date getTimestamp() {
+        return this.timestamp;
+    }
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-	
-	public boolean isEnabled() {
-		return this.enabled;
-	}
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+    public int getUserType() {
+        return this.userType;
+    }
 
-	public String getFirstName() {
-		return this.firstName;
-	}
+    public void setUserType(int userType) {
+        this.userType = userType;
+    }
 
-	public void setFirstName(String firstName) {
-		if( firstName.isEmpty() ) {
-			return;
-		}
-		this.firstName = firstName;
-	}
+    public String getUsername() {
+        return this.username;
+    }
 
-	public String getLastName() {
-		return this.lastName;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public void setLastName(String lastName) {
-		if( lastName.isEmpty() ) {
-			return;
-		}
-		this.lastName = lastName;
-	}
+    public List<Log> getLogs() {
+        return this.logs;
+    }
 
-	public String getPassword() {
-		return this.password;
-	}
+    public void setLogs(List<Log> logs) {
+        this.logs = logs;
+    }
 
-	public void setPassword(String password) {
-		if( password.trim().isEmpty() ) {
-			return;
-		}
-		System.out.println( "password set to ["+password+"]" );
-		this.password = password;
-	}
+    public Log addLog(Log log) {
+        this.getLogs().add(log);
+        log.setUser(this);
+        return log;
+    }
 
-	public Date getTimestamp() {
-		return this.timestamp;
-	}
+    public Log removeLog(Log log) {
+        this.getLogs().remove(log);
+        log.setUser(null);
+        return log;
+    }
 
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
+    public List<PurchaseOrderByUser> getPurchaseOrders() {
+        return this.purchaseOrders;
+    }
 
-	public int getUserType() {
-		return this.userType;
-	}
+    public void setPurchaseOrders(List<PurchaseOrderByUser> purchaseOrders) {
+        this.purchaseOrders = purchaseOrders;
+    }
 
-	public void setUserType(int userType) {
-		this.userType = userType;
-	}
+    public PurchaseOrderByUser addpurchaseOrder(PurchaseOrderByUser purchaseOrder) {
+        this.getPurchaseOrders().add(purchaseOrder);
+        purchaseOrder.setUser(this);
+        return purchaseOrder;
+    }
 
-	public String getUsername() {
-		return this.username;
-	}
-
-	public void setUsername(String username) {
-		if( username.trim().isEmpty() ) {
-			return;
-		}
-		System.out.println( "username set to ["+username+"]" );
-		this.username = username;
-	}
-
-	public List<Log> getLogs() {
-		return this.logs;
-	}
-
-	public void setLogs(List<Log> logs) {
-		this.logs = logs;
-	}
-
-	public Log addLog(Log log) {
-		getLogs().add(log);
-		log.setUser(this);
-
-		return log;
-	}
-
-	public Log removeLog(Log log) {
-		getLogs().remove(log);
-		log.setUser(null);
-
-		return log;
-	}
-	
-	public List<PurchaseOrderByUser> getPurchaseOrders() {
-		return this.purchaseOrders;
-	}
-
-	public void setPurchaseOrders(List<PurchaseOrderByUser> purchaseOrders) {
-		this.purchaseOrders = purchaseOrders;
-	}
-
-	public PurchaseOrderByUser addpurchaseOrder(PurchaseOrderByUser purchaseOrder) {
-		getPurchaseOrders().add(purchaseOrder);
-		purchaseOrder.setUser(this);
-
-		return purchaseOrder;
-	}
-
-	public PurchaseOrderByUser removePurchaseOrders(PurchaseOrderByUser purchaseOrder) {
-		getPurchaseOrders().remove(purchaseOrder);
-		purchaseOrder.setUser(null);
-
-		return purchaseOrder;
-	}
-
+    public PurchaseOrderByUser removePurchaseOrders(PurchaseOrderByUser purchaseOrder) {
+        this.getPurchaseOrders().remove(purchaseOrder);
+        purchaseOrder.setUser(null);
+        return purchaseOrder;
+    }
 }
+
